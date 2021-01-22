@@ -5,5 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js"
+  },
+  "dependencies": {
+    "currency-formatter": "^1.5.6"
   }
 }

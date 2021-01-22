@@ -1,3 +1,5 @@
+var currencyFormatter = require("currency-formatter");
+var lib = require("./lib");
 var { createInterface } = require("readline");
 
 var rl = createInterface({
@@ -13,33 +15,69 @@ const struct = {
 };
 
 console.log(
-  "command :  \n- nama-warung <nama>  \n- tanggal <tanggal> \n- nama-kasir <name> \n- tambah-product <nama> <harga> \n- print \n- reset \n- exit"
+  "command :  \n* nama-warung <nama>  \n* tanggal <tanggal> \n* nama-kasir <name> \n* tambah <nama> <harga> \n* print \n* reset \n* exit"
 );
 
 rl.prompt();
 
 rl.on("line", (input) => {
-  var [command, ...values] = input.split(" ");
+  var [command, ...text] = input.split(" ");
 
   switch (command) {
     case "nama-warung":
-      struct.namaWarung = values.join(" ");
+      struct.namaWarung = text.join(" ");
       break;
     case "tanggal":
-      struct.tanggal = values;
+      struct.tanggal = text;
       break;
     case "nama-kasir":
-      struct.namaKasir = values.join(" ");
+      struct.namaKasir = text.join(" ");
       break;
-    case "tambah-product":
-      const [nama, harge] = values;
+    case "tambah":
+      const [nama, harga] = text;
       struct.products.push({
         nama,
-        harge,
+        harga,
       });
       break;
     case "print":
-      console.log(struct);
+      let total = struct.products.reduce(
+        (totalHarga, product) => totalHarga + parseInt(product.harga),
+        0
+      );
+
+      lib.printInCenter(struct.namaWarung);
+      lib.printLeftRight(
+        "Tanggal",
+        struct.tanggal === ""
+          ? new Date().toLocaleString()
+          : new Date(struct.tanggal).toLocaleString()
+      );
+      lib.printLeftRight("Nama Kasir", struct.namaKasir);
+      lib.printInCenter("==============================");
+      struct.products.forEach((product) =>
+        lib.printLeftRight(
+          product.nama,
+          currencyFormatter.format(parseInt(product.harga), {
+            locale: "id-ID",
+          }),
+          "."
+        )
+      );
+      console.log("\n");
+      if(total > 0 ){
+        lib.printLeftRight(
+          "Total",
+          currencyFormatter.format(total, {
+            locale: "id-ID",
+          }),
+          "."
+        );
+      } else {
+        lib.printInCenter('Input Item Dulu ^-^')
+      }
+
+      struct.products = [];
       break;
     case "reset":
       struct.namaWarung = "";
@@ -50,7 +88,7 @@ rl.on("line", (input) => {
     case "exit":
       process.exit();
     default:
-      console.log(`${commandText} command not found!`);
+      console.log(`${command} command not found!`);
   }
 
   rl.prompt();
