@@ -19,12 +19,19 @@ API_URL=https://api.github.com
 
 ### Error file config
 
-- printah iinit config dotEnv harus di jalankan sebelum deklarasi variabel config
+- printah init config dotEnv harus di jalankan sebelum deklarasi variabel config
 
   ```js
   const dotenv = require("dotenv");
   const envFound = dotenv.config();
-
+  process.env.NODE_ENV = process.env.NODE_ENV || "development";
+  const config = {
+    port: process.env.PORT,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    oauthUrl: process.env.OAUTH_URL,
+    apiUrl: process.env.API_URL,
+  }
   .....
   ```
 
@@ -46,7 +53,7 @@ API_URL=https://api.github.com
 ### typo in authCallbackService.js
 
 - code line:14 typo, variable promise seharusnya `resp` agar variable dikenali saat di panggil
-- salah key pada saat mengenbalikan data token `resp.data["accessToken"]` seharusnya `resp.data["access_token"]`
+- salah key pada saat mengembalikan data token `resp.data["accessToken"]` seharusnya `resp.data["access_token"]`
 - karena fungsi `getUserInfo` mengembalikan promise, maka data response ke cliean harus berada dalam promise
 
   ```js
