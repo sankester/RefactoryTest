@@ -5,8 +5,8 @@
   "author": "sankester",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
+    "start:server": "node server/index.js",
+    "start:client": "node client/index.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
 const { addLog } = require("./lib");
 
@@ -15,7 +16,7 @@ app.post("/", (req, res) => {
   const message = `[${new Date().toISOString()}] Success: ${
     req.method
   } ${fullUrl} ${JSON.stringify(logData)}`;
-  addLog("server.log", message);
+  addLog(path.join(__dirname, 'server.log'), message);
   res.sendStatus(201);
 });
 
